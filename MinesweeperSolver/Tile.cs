@@ -1,32 +1,54 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace NonoGramAI.Entities
+namespace MinesweeperSolver
 {
-    public sealed class Tile
+    public sealed class Tile : Panel
     {
         public bool State { get; set; }
-        public bool Set { get; set; }
 
         public bool Flag { get; set; }
 
-        public bool isBomb { get; set; }
+        public bool IsBomb { get; set; }
 
-        public Panel GetTilePanel()
+        public int Count { get; set; }
+
+
+        public Tile()
         {
-            var panel = new Panel
+            Width = 30;
+            Height = 30;
+            Margin = new Padding(0);
+            Padding = new Padding(0);
+            BackColor = State ? Color.White : Color.LightGray;
+            BorderStyle = BorderStyle.FixedSingle;
+
+            MouseClick += (sender, args) =>
             {
-                Width = 30, Height = 30, 
-                Margin = new Padding(0), 
-                Padding = new Padding(0),
-                BackColor = State ? Color.White : Color.LightGray,
-                BorderStyle = BorderStyle.FixedSingle
+                if (args.Button == MouseButtons.Left)
+                {
+                    if (Flag || State) return;
+                    if (IsBomb)
+                    {
+                        BackColor = Color.Black;
+                        State = !State;
+                    }
+                    else
+                    {
+                        State = !State;
+                        BackColor = State ? Color.White : Color.LightGray;
+                        var controls = Controls.Find("label", false);
+                        foreach (var control in controls)
+                            control.Visible = true;
+                    }
+                }
+                else if (args.Button == MouseButtons.Right)
+                {
+                    if (State) return;
+                    Flag = !Flag;
+                    BackColor = Flag ? Color.Red : Color.LightGray;
+                }
             };
-
-            //if (Set && !State) panel.BackColor = Color.Red;
-            //else if(Set && State) panel.BackColor = Color.Orange;
-
-            return panel;
         }
     }
 }
