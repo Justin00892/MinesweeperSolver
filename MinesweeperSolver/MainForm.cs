@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using MinesweeperSolver.Properties;
 
 namespace MinesweeperSolver
@@ -14,25 +15,21 @@ namespace MinesweeperSolver
 
         private void ConstructBoard()
         {
-            gridPanel.Visible = false;
-            gridPanel.Controls.Clear();
+            Controls.Remove(_grid);
             var settings = Settings.Default;
-            _grid = new Grid(settings.Width,settings.Height,settings.Bombs);
-            gridPanel.RowCount = _grid.Height;
-            gridPanel.ColumnCount = _grid.Width;
-
-            for (var i = 0; i < _grid.Width; i++)
+            _grid = new Grid(settings.Width, settings.Height, settings.Bombs)
             {
-                for (var j = 0; j < _grid.Height; j++)
-                {
-                    var panel = _grid.Tiles[i][j];
-                    gridPanel.Controls.Add(panel);
-                    gridPanel.SetRow(panel, i);
-                    gridPanel.SetColumn(panel, j);
-                }
-            }
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                AutoSize = true,
+                Location = new Point(0, 25),
+                Margin = new Padding(0,0,0,0),
+                RowCount = settings.Width,
+                ColumnCount = settings.Height,
+                Visible = false
+            };
+            Controls.Add(_grid);
 
-            gridPanel.Visible = true;
+            _grid.Visible = true;
         }
 
         private void SettingsToolStripMenuItem_Click(object sender, System.EventArgs e)

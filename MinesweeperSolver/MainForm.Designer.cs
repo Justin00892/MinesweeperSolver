@@ -30,7 +30,6 @@
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gridPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,20 +52,6 @@
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
-            // gridPanel
-            // 
-            this.gridPanel.AutoSize = true;
-            this.gridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.gridPanel.ColumnCount = 1;
-            this.gridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.gridPanel.Location = new System.Drawing.Point(0, 25);
-            this.gridPanel.Margin = new System.Windows.Forms.Padding(0);
-            this.gridPanel.Name = "gridPanel";
-            this.gridPanel.RowCount = 1;
-            this.gridPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.gridPanel.Size = new System.Drawing.Size(0, 0);
-            this.gridPanel.TabIndex = 1;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -74,7 +59,6 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(376, 432);
-            this.Controls.Add(this.gridPanel);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
@@ -90,7 +74,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.TableLayoutPanel gridPanel;
     }
 }
 

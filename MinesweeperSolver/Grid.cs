@@ -1,36 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.Linq;
 using System.Windows.Forms;
 
 namespace MinesweeperSolver
 {
-    public class Grid
+    public class Grid : TableLayoutPanel
     {
-        public int Width { get; }
-        public int Height { get; }
+        public int GridWidth { get; }
+        public int GridHeight { get; }
         private int NumBombs { get; }
-        public List<List<Tile>> Tiles { get; }
 
         public Grid(int width, int height, int numBombs)
         {
-            Width = width;
-            Height = height;
+            GridWidth = width;
+            GridHeight = height;
 
             var rnd = new Random();
             NumBombs = numBombs < width*height ? numBombs : rnd.Next(width*height/4,width*height/2);
-            Tiles = new List<List<Tile>>();
 
-            for (var i = 0; i < Width; i++)
+            for (var i = 0; i < GridWidth; i++)
             {
-                var row = new List<Tile>();
-                for (var j = 0; j < Height; j++)
+                for (var j = 0; j < GridHeight; j++)
                 {
                     var tile = new Tile();
-                    row.Add(tile);
+                    tile.BackColorChanged += (sender, args) =>
+                    {
+                        if (tile.Count == 0 && !tile.IsBomb)
+                        {
+                            var location = GetPositionFromControl(tile);
+                            var adjacentPanel = (Tile) GetControlFromPosition(location.Column - 1, location.Row - 1);
+                            var newArgs = new MouseEventArgs(MouseButtons.Left,1,tile.Location.X,tile.Location.Y,0);
+                            adjacentPanel.OnClick(newArgs);
+                        }
+                    };
+                    Controls.Add(tile);
+                    SetRow(tile,i);
+                    SetColumn(tile,j);
                 }
-                Tiles.Add(row);
             }
             LayBombs();
         }
@@ -38,58 +46,63 @@ namespace MinesweeperSolver
         public void LayBombs()
         {
             var rnd = new Random();
-            var distribution = RandomList(Width, NumBombs, Height / 2);
-            for (var i = 0; i < Width; i++)
+            var distribution = RandomList(GridWidth, NumBombs, GridHeight / 2);
+            for (var i = 0; i < GridWidth; i++)
             {
-                var tempCol = Tiles[i].OrderBy(t => rnd.Next());
+                var tempCol = new List<Tile>();
+                for (var j = 0; j < GridHeight; j++)
+                    tempCol.Add((Tile)GetControlFromPosition(i,j));
+
+                tempCol = tempCol.OrderBy(t => rnd.Next()).ToList();
                 var selected = tempCol.Where(t => !t.State).Take(distribution[i]).ToList();
                 foreach (var tile in selected)
                     tile.IsBomb = true;
                 //Console.WriteLine("Bombs in Col: " + selected.Count);
             }
 
-            for (var i = 0; i < Width; i++)
+            for (var i = 0; i < GridWidth; i++)
             {
-                for (var j = 0; j < Height; j++)
+                for (var j = 0; j < GridHeight; j++)
                 {
-                    if (!Tiles[i][j].IsBomb) continue;
+                    if (!((Tile)GetControlFromPosition(i,j)).IsBomb) continue;
 
                     if (i != 0 && j != 0)
-                        Tiles[i - 1][j - 1].Count++;
+                        ((Tile)GetControlFromPosition(i-1, j-1)).Count++;
 
                     if (i != 0)
                     {
-                        Tiles[i - 1][j].Count++;
-                        if (j != Height - 1)
-                            Tiles[i - 1][j + 1].Count++;
+                        ((Tile)GetControlFromPosition(i-1, j)).Count++;
+                        if (j != GridHeight - 1)
+                            ((Tile)GetControlFromPosition(i-1, j+1)).Count++;
                     }
 
                     if (j != 0)
                     {
-                        Tiles[i][j - 1].Count++;
-                        if (i != Width - 1)
-                            Tiles[i + 1][j - 1].Count++;
+                        ((Tile)GetControlFromPosition(i, j-1)).Count++;
+                        if (i != GridWidth - 1)
+                            ((Tile)GetControlFromPosition(i+1, j-1)).Count++;
                     }
 
-                    if (j != Height - 1)
+                    if (j != GridHeight - 1)
                     {
-                        Tiles[i][j + 1].Count++;
+                        ((Tile)GetControlFromPosition(i, j+1)).Count++;
                     }
 
-                    if (i != Width - 1)
+                    if (i != GridWidth - 1)
                     {
-                        Tiles[i + 1][j].Count++;
+                        ((Tile)GetControlFromPosition(i+1, j)).Count++;
                     }
 
-                    if (i != Width - 1 && j != Height - 1)
-                        Tiles[i + 1][j + 1].Count++;
+                    if (i != GridWidth - 1 && j != GridHeight - 1)
+                        ((Tile)GetControlFromPosition(i+1, j)).Count++;
                 }
             }
 
-            foreach (var row in Tiles)
+            for (var i = 0; i < GridWidth; i++)
             {
-                foreach (var tile in row)
+                for (var j = 0; j < GridHeight; j++)
                 {
+                    var tile = (Tile) GetControlFromPosition(i, j);
                     var label = new Label
                     {
                         Text = tile.Count == 0 ? "" : tile.Count.ToString(),
