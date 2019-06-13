@@ -8,12 +8,14 @@ namespace MinesweeperSolver
 {
     public class Grid : TableLayoutPanel
     {
-        public int GridWidth { get; }
-        public int GridHeight { get; }
+        private int GridWidth { get; }
+        private int GridHeight { get; }
         private int NumBombs { get; }
+        private bool FirstClick { get; set; }
 
         public Grid(int width, int height, int numBombs)
         {
+            FirstClick = true;
             GridWidth = width;
             GridHeight = height;
 
@@ -27,7 +29,12 @@ namespace MinesweeperSolver
                     var tile = new Tile();
                     tile.BackColorChanged += (sender, args) =>
                     {
-                        if (tile.BackColor == Color.White && tile.Count == 0 && !tile.IsBomb)
+                        if (FirstClick && tile.BackColor == Color.White)
+                        {
+                            LayBombs(GetPositionFromControl(tile));
+                            FirstClick = false;
+                        }
+                        if (!FirstClick && tile.BackColor == Color.White && tile.Count == 0 && !tile.IsBomb)
                         {
                             var location = GetPositionFromControl(tile);
                             Tile adjacentPanel;
@@ -119,10 +126,9 @@ namespace MinesweeperSolver
                     SetColumn(tile,j);
                 }
             }
-            LayBombs();
         }
 
-        public void LayBombs()
+        public void LayBombs(TableLayoutPanelCellPosition location)
         {
             var rnd = new Random();
             var distribution = RandomList(GridWidth, NumBombs, GridHeight / 2);
@@ -132,7 +138,7 @@ namespace MinesweeperSolver
                 for (var j = 0; j < GridHeight; j++)
                     tempCol.Add((Tile)GetControlFromPosition(i,j));
 
-                tempCol = tempCol.OrderBy(t => rnd.Next()).ToList();
+                tempCol = tempCol.Where(t => GetPositionFromControl(t) != location).OrderBy(t => rnd.Next()).ToList();
                 var selected = tempCol.Where(t => !t.State).Take(distribution[i]).ToList();
                 foreach (var tile in selected)
                     tile.IsBomb = true;
