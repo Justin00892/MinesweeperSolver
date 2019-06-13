@@ -122,8 +122,8 @@ namespace MinesweeperSolver
                         }
                     };
                     Controls.Add(tile);
-                    SetRow(tile,i);
-                    SetColumn(tile,j);
+                    SetRow(tile,j);
+                    SetColumn(tile,i);
                 }
             }
         }

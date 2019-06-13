@@ -23,8 +23,8 @@ namespace MinesweeperSolver
                 AutoSize = true,
                 Location = new Point(0, 25),
                 Margin = new Padding(0,0,0,0),
-                RowCount = settings.Width,
-                ColumnCount = settings.Height,
+                RowCount = settings.Height,
+                ColumnCount = settings.Width,
                 Visible = false
             };
             Controls.Add(_grid);
