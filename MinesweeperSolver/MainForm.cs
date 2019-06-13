@@ -17,7 +17,7 @@ namespace MinesweeperSolver
         {
             Controls.Remove(_grid);
             var settings = Settings.Default;
-            bombsLeft.Text = "Bombs Left: " + settings.Bombs;
+            bombsLeft.Text = @"Bombs Left: " + settings.Bombs;
             _grid = new Grid(settings.Width, settings.Height, settings.Bombs)
             {
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -29,7 +29,7 @@ namespace MinesweeperSolver
                 Visible = false
             };
             Controls.Add(_grid);
-            _grid.OnRemainingBombsChanged += new Grid.dgEventRaiser(() => bombsLeft.Text = "Bombs Left: "+_grid.RemainingBombs);
+            _grid.OnRemainingBombsChanged += () => bombsLeft.Text = @"Bombs Left: "+_grid.RemainingBombs;
             _grid.Visible = true;
         }
 

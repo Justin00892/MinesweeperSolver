@@ -8,19 +8,19 @@ namespace MinesweeperSolver
 {
     public class Grid : TableLayoutPanel
     {
-        public int GridWidth { get; }
-        public int GridHeight { get; }
+        private int GridWidth { get; }
+        private int GridHeight { get; }
         private int NumBombs { get; }
         private bool FirstClick { get; set; }
 
-        public delegate void dgEventRaiser();
+        public delegate void DgEventRaiser();
 
-        public event dgEventRaiser OnRemainingBombsChanged;
+        public event DgEventRaiser OnRemainingBombsChanged;
         private int _remainingBombs;
         public int RemainingBombs
         {
-            get { return _remainingBombs; }
-            set
+            get => _remainingBombs;
+            private set
             {
                 _remainingBombs = value;
                 OnRemainingBombsChanged?.Invoke();
@@ -147,7 +147,7 @@ namespace MinesweeperSolver
             }
         }
 
-        public void LayBombs(TableLayoutPanelCellPosition location)
+        private void LayBombs(TableLayoutPanelCellPosition location)
         {
             var deadZoneList = new List<TableLayoutPanelCellPosition>()
             {
