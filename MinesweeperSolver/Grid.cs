@@ -8,10 +8,24 @@ namespace MinesweeperSolver
 {
     public class Grid : TableLayoutPanel
     {
-        private int GridWidth { get; }
-        private int GridHeight { get; }
+        public int GridWidth { get; }
+        public int GridHeight { get; }
         private int NumBombs { get; }
         private bool FirstClick { get; set; }
+
+        public delegate void dgEventRaiser();
+
+        public event dgEventRaiser OnRemainingBombsChanged;
+        private int _remainingBombs;
+        public int RemainingBombs
+        {
+            get { return _remainingBombs; }
+            set
+            {
+                _remainingBombs = value;
+                OnRemainingBombsChanged?.Invoke();
+            }
+        }
 
         public Grid(int width, int height, int numBombs)
         {
@@ -21,6 +35,7 @@ namespace MinesweeperSolver
 
             var rnd = new Random();
             NumBombs = numBombs < width*height ? numBombs : rnd.Next(width*height/4,width*height/2);
+            RemainingBombs = numBombs;
 
             for (var i = 0; i < GridWidth; i++)
             {
@@ -120,6 +135,10 @@ namespace MinesweeperSolver
                             }
 
                         }
+                        if (tile.IsBomb && tile.BackColor == Color.Red)
+                        {
+                            RemainingBombs--;
+                        }
                     };
                     Controls.Add(tile);
                     SetRow(tile,j);
@@ -130,6 +149,18 @@ namespace MinesweeperSolver
 
         public void LayBombs(TableLayoutPanelCellPosition location)
         {
+            var deadZoneList = new List<TableLayoutPanelCellPosition>()
+            {
+                new TableLayoutPanelCellPosition(location.Column-1,location.Row-1),
+                new TableLayoutPanelCellPosition(location.Column-1,location.Row),
+                new TableLayoutPanelCellPosition(location.Column-1,location.Row+1),
+                new TableLayoutPanelCellPosition(location.Column,location.Row-1),
+                location,
+                new TableLayoutPanelCellPosition(location.Column,location.Row+1),
+                new TableLayoutPanelCellPosition(location.Column+1,location.Row-1),
+                new TableLayoutPanelCellPosition(location.Column+1,location.Row),
+                new TableLayoutPanelCellPosition(location.Column+1,location.Row+1)
+            };
             var rnd = new Random();
             var distribution = RandomList(GridWidth, NumBombs, GridHeight / 2);
             for (var i = 0; i < GridWidth; i++)
@@ -138,7 +169,7 @@ namespace MinesweeperSolver
                 for (var j = 0; j < GridHeight; j++)
                     tempCol.Add((Tile)GetControlFromPosition(i,j));
 
-                tempCol = tempCol.Where(t => GetPositionFromControl(t) != location).OrderBy(t => rnd.Next()).ToList();
+                tempCol = tempCol.Where(t => !deadZoneList.Contains(GetPositionFromControl(t))).OrderBy(t => rnd.Next()).ToList();
                 var selected = tempCol.Where(t => !t.State).Take(distribution[i]).ToList();
                 foreach (var tile in selected)
                     tile.IsBomb = true;
