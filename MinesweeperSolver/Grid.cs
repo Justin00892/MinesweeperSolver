@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -27,12 +27,91 @@ namespace MinesweeperSolver
                     var tile = new Tile();
                     tile.BackColorChanged += (sender, args) =>
                     {
-                        if (tile.Count == 0 && !tile.IsBomb)
+                        if (tile.BackColor == Color.White && tile.Count == 0 && !tile.IsBomb)
                         {
                             var location = GetPositionFromControl(tile);
-                            var adjacentPanel = (Tile) GetControlFromPosition(location.Column - 1, location.Row - 1);
-                            var newArgs = new MouseEventArgs(MouseButtons.Left,1,tile.Location.X,tile.Location.Y,0);
-                            adjacentPanel.OnClick(newArgs);
+                            Tile adjacentPanel;
+
+                            if (location.Column != 0 && location.Row != 0)
+                            {
+                                adjacentPanel = (Tile) GetControlFromPosition(location.Column - 1, location.Row - 1);
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+                            }
+
+                            if (location.Column != 0)
+                            {
+                                adjacentPanel = (Tile)GetControlFromPosition(location.Column - 1, location.Row);
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+
+                                if (location.Row != GridHeight - 1)
+                                {
+                                    adjacentPanel = (Tile) GetControlFromPosition(location.Column - 1, location.Row + 1);
+                                    if (!adjacentPanel.IsBomb)
+                                    {
+                                        var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                        adjacentPanel.OnClick(newArgs);
+                                    }
+                                }
+                            }
+
+                            if (location.Row != 0)
+                            {
+                                adjacentPanel = (Tile)GetControlFromPosition(location.Column, location.Row - 1);
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+
+                                if (location.Column != GridWidth - 1)
+                                {
+                                    adjacentPanel = (Tile) GetControlFromPosition(location.Column + 1, location.Row - 1);
+                                    if (!adjacentPanel.IsBomb)
+                                    {
+                                        var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                        adjacentPanel.OnClick(newArgs);
+                                    }
+                                }
+                            }
+
+                            if (location.Row != GridHeight - 1)
+                            {
+                                adjacentPanel = (Tile)GetControlFromPosition(location.Column, location.Row + 1);
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+                            }
+
+                            if (location.Column != GridWidth - 1)
+                            {
+                                adjacentPanel = (Tile)GetControlFromPosition(location.Column + 1, location.Row );
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+                            }
+
+                            if (location.Column != GridWidth - 1 && location.Row != GridHeight - 1)
+                            {
+                                adjacentPanel = (Tile) GetControlFromPosition(location.Column + 1, location.Row + 1);
+                                if (!adjacentPanel.IsBomb)
+                                {
+                                    var newArgs = new MouseEventArgs(MouseButtons.Left, 1, tile.Location.X, tile.Location.Y, 0);
+                                    adjacentPanel.OnClick(newArgs);
+                                }
+                            }
+
                         }
                     };
                     Controls.Add(tile);
@@ -94,7 +173,7 @@ namespace MinesweeperSolver
                     }
 
                     if (i != GridWidth - 1 && j != GridHeight - 1)
-                        ((Tile)GetControlFromPosition(i+1, j)).Count++;
+                        ((Tile)GetControlFromPosition(i+1, j+1)).Count++;
                 }
             }
 
