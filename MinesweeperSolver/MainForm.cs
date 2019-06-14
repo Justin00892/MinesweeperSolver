@@ -17,7 +17,7 @@ namespace MinesweeperSolver
         {
             Controls.Remove(_grid);
             var settings = Settings.Default;
-            bombsLeft.Text = "Bombs Left: " + settings.Bombs;
+            bombsLeft.Text = @"Bombs Left: " + settings.Bombs;
             _grid = new Grid(settings.Width, settings.Height, settings.Bombs)
             {
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
