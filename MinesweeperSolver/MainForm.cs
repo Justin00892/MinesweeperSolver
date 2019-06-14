@@ -29,7 +29,15 @@ namespace MinesweeperSolver
                 Visible = false
             };
             Controls.Add(_grid);
-            _grid.OnRemainingBombsChanged += new Grid.dgEventRaiser(() => bombsLeft.Text = "Bombs Left: "+_grid.RemainingBombs);
+            _grid.OnRemainingBombsChanged += new Grid.bombEventRaiser(() => bombsLeft.Text = "Bombs Left: "+_grid.RemainingBombs);
+            _grid.OnGameOver += new Grid.gameOverEventRaiser(() =>
+            {
+                var result = MessageBox.Show("Game Over! Play Again?");
+                if (result == DialogResult.OK)
+                    ConstructBoard();
+                else
+                    Application.Exit();
+            });
             _grid.Visible = true;
         }
 

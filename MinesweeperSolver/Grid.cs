@@ -13,9 +13,8 @@ namespace MinesweeperSolver
         private int NumBombs { get; }
         private bool FirstClick { get; set; }
 
-        public delegate void dgEventRaiser();
-
-        public event dgEventRaiser OnRemainingBombsChanged;
+        public delegate void bombEventRaiser();
+        public event bombEventRaiser OnRemainingBombsChanged;
         private int _remainingBombs;
         public int RemainingBombs
         {
@@ -24,6 +23,20 @@ namespace MinesweeperSolver
             {
                 _remainingBombs = value;
                 OnRemainingBombsChanged?.Invoke();
+            }
+        }
+
+        public delegate void gameOverEventRaiser();
+        public event gameOverEventRaiser OnGameOver;
+        private bool _gameOver;
+
+        public bool GameOver
+        {
+            get { return _gameOver; }
+            set
+            {
+                _gameOver = value;
+                OnGameOver?.Invoke();
             }
         }
 
@@ -138,6 +151,11 @@ namespace MinesweeperSolver
                         if (tile.IsBomb && tile.BackColor == Color.Red)
                         {
                             RemainingBombs--;
+                        }
+
+                        if (tile.IsBomb && tile.BackColor == Color.Black)
+                        {
+                            GameOver = true;
                         }
                     };
                     Controls.Add(tile);
