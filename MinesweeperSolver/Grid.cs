@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MinesweeperSolver
@@ -146,13 +147,8 @@ namespace MinesweeperSolver
                                     adjacentPanel.OnClick(newArgs);
                                 }
                             }
-
                         }
-                        if (tile.IsBomb && tile.BackColor == Color.Red)
-                        {
-                            RemainingBombs--;
-                        }
-
+                        Solver.PredictBombs(this, GetPositionFromControl(tile));
                         if (tile.IsBomb && tile.BackColor == Color.Black)
                         {
                             GameOver = true;
@@ -245,6 +241,14 @@ namespace MinesweeperSolver
                         Name = "label"
                     };
                     tile.Controls.Add(label);
+                    var tracker = new Label
+                    {
+                        Text = "",
+                        Enabled = false,
+                        Visible = true,
+                        Name = "tracker"
+                    };
+                    tile.Controls.Add(tracker);
                 }
             }
         }

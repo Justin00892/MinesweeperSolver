@@ -38,6 +38,7 @@ namespace MinesweeperSolver
                 else
                     Application.Exit();
             });
+            _grid.OnRemainingBombsChanged += () => bombsLeft.Text = @"Bombs Left: "+_grid.RemainingBombs;
             _grid.Visible = true;
         }
 

@@ -61,6 +61,7 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Solver.cs" />
     <Compile Include="Tile.cs">
       <SubType>Component</SubType>
     </Compile>
