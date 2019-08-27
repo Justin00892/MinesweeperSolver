@@ -48,5 +48,10 @@ namespace MinesweeperSolver
             if(settingsForm.ShowDialog() == DialogResult.OK)
                 ConstructBoard();
         }
+
+        private void PredictToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            Solver.PredictBombs(_grid);
+        }
     }
 }

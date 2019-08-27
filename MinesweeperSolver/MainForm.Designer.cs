@@ -31,6 +31,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bombsLeft = new System.Windows.Forms.ToolStripMenuItem();
+            this.predictToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,7 +40,8 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
-            this.bombsLeft});
+            this.bombsLeft,
+            this.predictToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -60,6 +62,13 @@
             this.bombsLeft.Size = new System.Drawing.Size(112, 24);
             this.bombsLeft.Text = "Bombs Left: X";
             // 
+            // predictToolStripMenuItem
+            // 
+            this.predictToolStripMenuItem.Name = "predictToolStripMenuItem";
+            this.predictToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
+            this.predictToolStripMenuItem.Text = "Predict";
+            this.predictToolStripMenuItem.Click += new System.EventHandler(this.PredictToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -69,7 +78,7 @@
             this.ClientSize = new System.Drawing.Size(501, 532);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "Minesweeper";
             this.menuStrip.ResumeLayout(false);
@@ -84,6 +93,7 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bombsLeft;
+        private System.Windows.Forms.ToolStripMenuItem predictToolStripMenuItem;
     }
 }
 

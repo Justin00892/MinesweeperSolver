@@ -52,6 +52,9 @@ namespace MinesweeperSolver
                 if (State) return;
                 Flag = !Flag;
                 BackColor = Flag ? Color.Red : Color.LightGray;
+                var controls = Controls.Find("tracker", false);
+                foreach (var control in controls)
+                    control.Visible = !Flag;
             }
         }
     }

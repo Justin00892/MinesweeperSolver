@@ -148,7 +148,6 @@ namespace MinesweeperSolver
                                 }
                             }
                         }
-                        Solver.PredictBombs(this, GetPositionFromControl(tile));
                         if (tile.IsBomb && tile.BackColor == Color.Black)
                         {
                             GameOver = true;
